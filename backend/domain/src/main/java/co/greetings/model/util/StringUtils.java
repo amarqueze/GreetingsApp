@@ -29,7 +29,7 @@ public class StringUtils {
         KeySpec spec = new PBEKeySpec("8333247922".toCharArray(), "f4abe9ef83362".getBytes(), 65536, 256);
         SecretKey originalKey = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
 
-        Cipher cipher = Cipher.getInstance("AES_CIPHER_ALGORITHM"); 
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
         var ivParameterSpec = new IvParameterSpec(new byte[] { 124, 100, 68, -57, -79, 32, 3, 22, -8, -127, 77, 60, 16, 90, -11, 92}); 
         cipher.init(Cipher.ENCRYPT_MODE, originalKey, ivParameterSpec);
         return cipher.doFinal(password.getBytes());

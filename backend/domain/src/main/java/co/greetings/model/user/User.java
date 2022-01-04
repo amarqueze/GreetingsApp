@@ -17,22 +17,22 @@ public class User {
     private Role role;
 
     public static User newUser(String fullname, String email, String aboutMe, String password, Role role) {
+        String cipherPassword;
         try {
-            String cipherPassword = new String(StringUtils.encryptText(password));
-            return new User(fullname, email, aboutMe, cipherPassword, role);
+            cipherPassword = new String(StringUtils.encryptText(password));            
         } catch (Exception e) {
             throw new IllegalStateException("Password could not be encrypt");
-        }        
+        }   
+
+        return new User(fullname, email, aboutMe, cipherPassword, role);     
     }
 
     public User(String fullname, String email, String aboutMe, String password, Role role) {
         validateFieldEmpty(fullname, "Fullname is required");
-        validateFieldAlphanumeric(fullname, "Fullname only must Alphanumeric characteres");
         validateFieldLength(fullname, 3, 80, "Fullname only must be 3 to 80 characteres");
         validateFieldEmpty(email, "Email is required");
         validateEmail(email, "Email is invalid");
         validateFieldEmpty(aboutMe, "AboutMe is required");
-        validateFieldAlphanumeric(aboutMe, "AboutMe only must Alphanumeric characteres");
         validateFieldLength(aboutMe, 3, 200, "aboutMe only must be 3 to 200 characteres");
         validateFieldEmpty(password, "Password is required");
         validateFieldLength(password, 6, 80, "Password only must be 3 to 80 characteres");
@@ -50,11 +50,7 @@ public class User {
     }
 
     private void validateFieldLength(String field, int minlength, int maxlength, String messageExeception) {
-        checkArgument(s -> s.length() >= minlength && s.length() <= maxlength, field, messageExeception);
-    }
-
-    private void validateFieldAlphanumeric(String fullname, String messageExeception) {
-        checkArgument(s -> !StringUtils.isAlphanumeric(s), fullname, messageExeception);
+        checkArgument(s -> s.length() < minlength || s.length() > maxlength, field, messageExeception);
     }
 
     private void validateEmail(String email, String messageExeception) {

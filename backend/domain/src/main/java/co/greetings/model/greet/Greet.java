@@ -17,7 +17,6 @@ public class Greet {
         validateFieldAlphanumeric(acronym, "Acronym only must Alphanumeric characteres");
         validateFieldLength(acronym, 2, 4, "Acronym only must be 2 to 4 characteres");
         validateFieldEmpty(message, "Acronym is required");
-        validateFieldLength(message, 1, 25, "Acronym only must be 1 to 25 characteres");
 
         this.acronym = acronym;
         this.message = message;
@@ -27,11 +26,11 @@ public class Greet {
         checkArgument(StringUtils::isBlank, field, messageExeception);
     }
 
-    private void validateFieldAlphanumeric(String fullname, String messageExeception) {
-        checkArgument(s -> !StringUtils.isAlphanumeric(s), fullname, messageExeception);
+    private void validateFieldAlphanumeric(String field, String messageExeception) {
+        checkArgument(s -> !StringUtils.isAlphanumeric(s), field, messageExeception);
     }
 
     private void validateFieldLength(String field, int minlength, int maxlength, String messageExeception) {
-        checkArgument(s -> s.length() >= minlength && s.length() <= maxlength, field, messageExeception);
+        checkArgument(s -> s.length() < minlength || s.length() > maxlength, field, messageExeception);
     }
 }
