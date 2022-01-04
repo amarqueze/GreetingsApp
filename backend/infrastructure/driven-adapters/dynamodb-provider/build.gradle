@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(':domain')
+    implementation 'software.amazon.awssdk:dynamodb-enhanced:2.16.37'    
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'software.amazon.awssdk:sts:2.16.57'
+}
