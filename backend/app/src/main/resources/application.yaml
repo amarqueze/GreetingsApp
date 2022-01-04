@@ -1,0 +1,58 @@
+server:
+  port: 8081
+spring:  
+  application:
+    name: Greetings APP
+    version: 1.0.0
+    description: 'API Rest what provide Greetings for the users'
+  webflux:
+    base-path: /greetingsapp
+  devtools:
+    add-properties: false
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  profiles:
+    active: local
+    
+logging:
+  level:
+    web: INFO
+    org.springframework.boot.autoconfigure.security: ERROR
+    co.greetings: INFO
+
+springdoc:
+  swagger-ui:
+    use-root-path: true
+
+apidoc:
+  greet:
+    name: Greet
+    description: 'Operations relationship about greetings'
+    operations:
+      getgreetbylanguage: 'Get Greet for one User authenticated by language specified'
+  user:
+    name: User
+    description: 'Operations relationship about Users'
+    operations:
+      getAll: 'Get all Users'
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+dynamodb:
+  urlEndpointLocal: 'http://172.24.0.2:8000'
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+dynamodb:
+  urlEndpointLocal: ${URL_ENDPOINT_DYNAMODB}
+
