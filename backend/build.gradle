@@ -3,6 +3,7 @@ buildscript {
         javaVersion = '11'
         openApiVersion = '1.6.3'
 		springBootVersion = '2.5.3'
+        jose4jVersion = '0.7.6'
         objectMapperVersion = '0.1.0'               
 		jacocoVersion = '0.8.5'
         lombokVersion = '1.18.16'

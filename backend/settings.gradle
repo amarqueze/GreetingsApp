@@ -18,4 +18,6 @@ include ':rest-controller'
 project(':rest-controller').projectDir = file('./infrastructure/entry-points/rest-controller')
 include ':dynamodb-provider'
 project(':dynamodb-provider').projectDir = file('./infrastructure/driven-adapters/dynamodb-provider')
+include ':jwt-provider'
+project(':jwt-provider').projectDir = file('./infrastructure/driven-adapters/jwt-provider')
 
