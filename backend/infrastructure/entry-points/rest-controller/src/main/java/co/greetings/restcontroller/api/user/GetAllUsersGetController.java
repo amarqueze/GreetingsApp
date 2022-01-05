@@ -20,6 +20,7 @@ import reactor.core.publisher.Mono;
 import static co.greetings.restcontroller.api.util.HttpCodeErrorCommonMapper.toHttpStatus400;
 import static co.greetings.restcontroller.api.util.HttpCodeErrorCommonMapper.toHttpStatus500;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,7 @@ public class GetAllUsersGetController {
         value = API_PATH,
         produces = { "application/json" }
     )
-    public Mono<ResponseEntity<MessageHttpResponse>> getUsers() {
+    public Mono<ResponseEntity<MessageHttpResponse>> getUsers(Principal principal) {
         return usersSearcher.searchAll()
             .doOnSuccess(users -> registerLogSuccess(users, API_PATH))
             .doOnError(this::registerLogError)

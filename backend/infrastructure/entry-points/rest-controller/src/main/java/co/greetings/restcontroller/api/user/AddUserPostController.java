@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import co.greetings.model.user.DuplicateUser;
 import co.greetings.model.user.NotCreatedUser;
+import co.greetings.model.user.NotPermitOperation;
 import co.greetings.model.user.User;
 import co.greetings.model.util.exceptions.NotCouldContinueOperation;
 import co.greetings.model.util.exceptions.NotReadyRepository;
@@ -22,6 +23,9 @@ import reactor.core.publisher.Mono;
 
 import static co.greetings.restcontroller.api.util.HttpCodeErrorCommonMapper.toHttpStatus400;
 import static co.greetings.restcontroller.api.util.HttpCodeErrorCommonMapper.toHttpStatus500;
+import static co.greetings.restcontroller.api.util.HttpCodeErrorCommonMapper.toHttpStatus403;
+
+import java.security.Principal;
 
 @RestController
 @Tag(name = "${apidoc.user.name}", description = "${apidoc.user.description}")
@@ -35,10 +39,10 @@ public class AddUserPostController {
         value = API_PATH,
         produces = { "application/json" }
     )
-    public Mono<ResponseEntity<MessageHttpResponse>> addUser(@RequestBody UserDtoRequest userBody) {
+    public Mono<ResponseEntity<MessageHttpResponse>> addUser(@RequestBody UserDtoRequest userBody, Principal principal) {
         return Mono.defer(() -> {
             var newUser = userBody.toUser();
-            return userCreator.create(newUser)
+            return userCreator.create(newUser, principal.getName())
                 .doOnSuccess(user -> registerLogSuccess(user, API_PATH))
                 .doOnError(this::registerLogError)
                 .map(user ->  {
@@ -50,6 +54,7 @@ public class AddUserPostController {
         .onErrorResume(NullPointerException.class, ex -> toHttpStatus400(ex, API_PATH))
         .onErrorResume(IllegalStateException.class, ex -> toHttpStatus400(ex, API_PATH))
         .onErrorResume(DuplicateUser.class, ex -> toHttpStatus400(ex, API_PATH))  
+        .onErrorResume(NotPermitOperation.class, ex -> toHttpStatus403(ex, API_PATH))  
         .onErrorResume(NotCreatedUser.class, ex -> toHttpStatus500(ex, API_PATH))
         .onErrorResume(NotReadyRepository.class, ex -> toHttpStatus500(ex, API_PATH))   
         .onErrorResume(NotCouldContinueOperation.class, ex -> toHttpStatus500(ex, API_PATH))        

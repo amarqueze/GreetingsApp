@@ -7,6 +7,7 @@ import co.greetings.model.auth.NotCreatedSession;
 import co.greetings.model.auth.UserNotAuthenticated;
 import co.greetings.model.user.DuplicateUser;
 import co.greetings.model.user.NotCreatedUser;
+import co.greetings.model.user.NotPermitOperation;
 import co.greetings.model.util.exceptions.NotCouldContinueOperation;
 import co.greetings.model.util.exceptions.NotReadyRepository;
 import reactor.core.publisher.Mono;
@@ -50,6 +51,16 @@ public class HttpCodeErrorCommonMapper {
             .setTitle("Illegal status")
             .setdetail(e.getMessage());
         return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(msg));
+    }
+
+    public static Mono<ResponseEntity<MessageHttpResponse>> toHttpStatus403(NotPermitOperation e, String path) {
+        MessageHttpResponse msg = ErrorMessageHttpResponse.builder()
+            .setPath(path)
+            .setStatus(HttpStatus.FORBIDDEN.value())
+            .setCode(e.getCode())
+            .setTitle("Illegal Action")
+            .setdetail(e.getMessage());
+        return Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN.value()).body(msg));
     }
 
     public static Mono<ResponseEntity<MessageHttpResponse>> toHttpStatus401(UserNotAuthenticated e, String path) {
