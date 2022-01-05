@@ -35,7 +35,7 @@ public class UserMapper {
         return Map.of(
             "Email", AttributeValue.builder().s( user.getEmail() ).build(),
             "Fullname", AttributeValue.builder().s( user.getFullname() ).build(),
-            "AboutMe", AttributeValue.builder().n( user.getAboutMe() ).build(),
+            "AboutMe", AttributeValue.builder().s( user.getAboutMe() ).build(),
             "Password", AttributeValue.builder().s( user.getPassword() ).build(),
             "Role", AttributeValue.builder().s( user.getRole().getName() ).build()
         );
