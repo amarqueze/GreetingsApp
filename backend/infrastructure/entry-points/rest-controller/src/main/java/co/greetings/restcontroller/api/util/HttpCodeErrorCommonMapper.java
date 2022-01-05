@@ -3,6 +3,8 @@ package co.greetings.restcontroller.api.util;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import co.greetings.model.auth.NotCreatedSession;
+import co.greetings.model.auth.UserNotAuthenticated;
 import co.greetings.model.user.DuplicateUser;
 import co.greetings.model.user.NotCreatedUser;
 import co.greetings.model.util.exceptions.NotCouldContinueOperation;
@@ -50,12 +52,32 @@ public class HttpCodeErrorCommonMapper {
         return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(msg));
     }
 
+    public static Mono<ResponseEntity<MessageHttpResponse>> toHttpStatus401(UserNotAuthenticated e, String path) {
+        MessageHttpResponse msg = ErrorMessageHttpResponse.builder()
+            .setPath(path)
+            .setStatus(HttpStatus.UNAUTHORIZED.value())
+            .setCode(e.getCode())
+            .setTitle("Unauthorized")
+            .setdetail(e.getMessage());
+        return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(msg));
+    }
+
     public static Mono<ResponseEntity<MessageHttpResponse>> toHttpStatus500(NotCreatedUser e, String path) {
         MessageHttpResponse msg = ErrorMessageHttpResponse.builder()
             .setPath(path)
             .setCode(e.getCode())
             .setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
             .setTitle("user has not been registered, try again")
+            .setdetail(e.getMessage());
+        return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(msg));
+    }
+
+    public static Mono<ResponseEntity<MessageHttpResponse>> toHttpStatus500(NotCreatedSession e, String path) {
+        MessageHttpResponse msg = ErrorMessageHttpResponse.builder()
+            .setPath(path)
+            .setCode(e.getCode())
+            .setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .setTitle("Error Session")
             .setdetail(e.getMessage());
         return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(msg));
     }
