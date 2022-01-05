@@ -6,14 +6,14 @@ import lombok.Data;
 
 @Builder
 @Data
-public class UserDto {
+public class UserDtoResponse {
     private String fullname;
     private String email;
     private String aboutMe;
     private String role;
 
-    public static UserDto toUserDto(User user) {
-        return UserDto.builder()
+    public static UserDtoResponse toUserDtoResponse(User user) {
+        return UserDtoResponse.builder()
             .fullname(user.getFullname())
             .email(user.getEmail())
             .aboutMe(user.getAboutMe())

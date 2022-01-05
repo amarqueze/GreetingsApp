@@ -39,7 +39,7 @@ public class GetAllUsersGetController {
             .doOnSuccess(users -> registerLogSuccess(users, API_PATH))
             .doOnError(this::registerLogError)
             .map(users ->  {
-                List<UserDto> usersDto = users.getListUsers(UserDto::toUserDto);
+                List<UserDtoResponse> usersDto = users.getListUsers(UserDtoResponse::toUserDtoResponse);
                 MessageHttpResponse response = new SuccessMessageHttpResponse<>(usersDto);
                 return ResponseEntity.ok().body(response);
             })
@@ -52,8 +52,7 @@ public class GetAllUsersGetController {
     }
 
     private void registerLogError(Throwable error) {
-        var message = error.toString();
-        LOG.error("Error Handler [Get Users] - {}", message);
+        LOG.error(error.getMessage());
     }
 
     private void registerLogSuccess(Users users, String path) {
