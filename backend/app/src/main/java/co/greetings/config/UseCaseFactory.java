@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import co.greetings.model.auth.AuthProvider;
 import co.greetings.model.user.UserRepository;
 import co.greetings.usecase.auth.SessionLogin;
+import co.greetings.usecase.auth.SessionSearcher;
 import co.greetings.usecase.user.UserCreator;
 import co.greetings.usecase.user.UserSearcher;
 import co.greetings.usecase.user.UsersSearcher;
@@ -30,5 +31,10 @@ public class UseCaseFactory {
     @Bean
     public SessionLogin sessionLogin(UserRepository repository, AuthProvider authProvider){
         return new SessionLogin(repository, authProvider);
+    }
+
+    @Bean
+    public SessionSearcher sessionSearcher(AuthProvider authProvider){
+        return new SessionSearcher(authProvider);
     }
 }

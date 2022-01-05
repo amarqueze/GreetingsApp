@@ -12,6 +12,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
+import co.greetings.restcontroller.api.filter.JWTVerifierFilter;
+import co.greetings.usecase.auth.SessionSearcher;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -35,20 +37,21 @@ public class App implements CommandLineRunner {
                     .allowedMethods("GET", "POST", "PUT", "HEAD");
 			}
 		};
-	}
+	} 
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        http
-            .csrf()
-                .disable()
-            .headers(headerCustomizer -> {
-                headerCustomizer.xssProtection().disable();
-                headerCustomizer.contentSecurityPolicy("frame-ancestors 'none'");
-                headerCustomizer.hsts()
-                    .includeSubdomains(true)
-                    .maxAge(Duration.ofDays(365));
-            });
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, SessionSearcher sessionSearcher) {
+        http.csrf().disable().headers(headerCustomizer -> {
+            headerCustomizer.xssProtection().disable();
+            headerCustomizer.contentSecurityPolicy("frame-ancestors 'none'");
+            headerCustomizer.hsts()
+                .includeSubdomains(true)
+                .maxAge(Duration.ofDays(365));
+        })
+        .securityContextRepository(new JWTVerifierFilter(sessionSearcher))
+        .authorizeExchange()
+            .pathMatchers("/api/user**").authenticated()
+            .anyExchange().permitAll();
         return http.build();
     }
 
