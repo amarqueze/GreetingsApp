@@ -1,0 +1,31 @@
+version: "3"
+services:
+  aws_dynamodb:
+    command: "-jar DynamoDBLocal.jar -sharedDb -optimizeDbBeforeStartup -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: aws_dynamodb
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./data:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+    networks:
+      - demo-technicaltest
+
+  aws_dynamodb_ui:
+    image: aaronshaf/dynamodb-admin
+    container_name: dynamodb_admin_ui
+    ports:
+      - "8001:8001"
+    environment:
+      DYNAMO_ENDPOINT: "http://aws_dynamodb:8000"
+      AWS_REGION: "us-west-1"
+      AWS_ACCESS_KEY_ID: accessKeyId
+      AWS_SECRET_ACCESS_KEY: secretAccessKey
+    networks:
+      - demo-technicaltest 
+    depends_on:
+      - aws_dynamodb          
+
+networks:
+  demo-technicaltest:
