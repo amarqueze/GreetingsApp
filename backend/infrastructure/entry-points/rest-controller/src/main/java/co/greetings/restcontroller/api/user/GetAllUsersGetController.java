@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.greetings.model.user.NotPermitOperation;
 import co.greetings.model.user.Users;
 import co.greetings.model.util.exceptions.NotCouldContinueOperation;
 import co.greetings.model.util.exceptions.NotReadyRepository;
@@ -18,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import reactor.core.publisher.Mono;
 
 import static co.greetings.restcontroller.api.util.HttpCodeErrorCommonMapper.toHttpStatus400;
+import static co.greetings.restcontroller.api.util.HttpCodeErrorCommonMapper.toHttpStatus403;
 import static co.greetings.restcontroller.api.util.HttpCodeErrorCommonMapper.toHttpStatus500;
 
 import java.security.Principal;
@@ -36,7 +38,7 @@ public class GetAllUsersGetController {
         produces = { "application/json" }
     )
     public Mono<ResponseEntity<MessageHttpResponse>> getUsers(Principal principal) {
-        return usersSearcher.searchAll()
+        return usersSearcher.searchAll(principal.getName())
             .doOnSuccess(users -> registerLogSuccess(users, API_PATH))
             .doOnError(this::registerLogError)
             .map(users ->  {
@@ -47,6 +49,7 @@ public class GetAllUsersGetController {
             .onErrorResume(IllegalArgumentException.class, ex -> toHttpStatus400(ex, API_PATH))
             .onErrorResume(NullPointerException.class, ex -> toHttpStatus400(ex, API_PATH))
             .onErrorResume(IllegalStateException.class, ex -> toHttpStatus400(ex, API_PATH))
+            .onErrorResume(NotPermitOperation.class, ex -> toHttpStatus403(ex, API_PATH)) 
             .onErrorResume(NotReadyRepository.class, ex -> toHttpStatus500(ex, API_PATH))
             .onErrorResume(NotCouldContinueOperation.class, ex -> toHttpStatus500(ex, API_PATH))
             .onErrorResume(Exception.class, ex -> toHttpStatus500(API_PATH));
