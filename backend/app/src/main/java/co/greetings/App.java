@@ -50,6 +50,7 @@ public class App implements CommandLineRunner {
         })
         .securityContextRepository(new JWTVerifierFilter(sessionSearcher))
         .authorizeExchange()
+            .pathMatchers("/api/greet").authenticated()
             .pathMatchers("/api/user**").authenticated()
             .anyExchange().permitAll();
         return http.build();

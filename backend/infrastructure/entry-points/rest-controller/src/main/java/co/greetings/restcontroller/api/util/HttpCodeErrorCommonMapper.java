@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import co.greetings.model.auth.NotCreatedSession;
 import co.greetings.model.auth.UserNotAuthenticated;
+import co.greetings.model.greet.NotFoundGreet;
 import co.greetings.model.user.DuplicateUser;
 import co.greetings.model.user.NotCreatedUser;
 import co.greetings.model.user.NotPermitOperation;
@@ -71,6 +72,16 @@ public class HttpCodeErrorCommonMapper {
             .setTitle("Unauthorized")
             .setdetail(e.getMessage());
         return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(msg));
+    }
+
+    public static Mono<ResponseEntity<MessageHttpResponse>> toHttpStatus500(NotFoundGreet e, String path) {
+        MessageHttpResponse msg = ErrorMessageHttpResponse.builder()
+            .setPath(path)
+            .setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .setCode(e.getCode())
+            .setTitle("Lang not exist")
+            .setdetail(e.getMessage());
+        return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(msg));
     }
 
     public static Mono<ResponseEntity<MessageHttpResponse>> toHttpStatus500(NotCreatedUser e, String path) {
