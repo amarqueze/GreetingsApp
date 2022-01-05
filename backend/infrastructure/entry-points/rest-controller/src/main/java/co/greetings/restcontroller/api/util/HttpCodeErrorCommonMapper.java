@@ -59,7 +59,7 @@ public class HttpCodeErrorCommonMapper {
             .setCode(e.getCode())
             .setTitle("Unauthorized")
             .setdetail(e.getMessage());
-        return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(msg));
+        return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(msg));
     }
 
     public static Mono<ResponseEntity<MessageHttpResponse>> toHttpStatus500(NotCreatedUser e, String path) {
