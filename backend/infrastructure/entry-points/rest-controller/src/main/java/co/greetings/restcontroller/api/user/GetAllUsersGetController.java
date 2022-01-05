@@ -29,7 +29,7 @@ public class GetAllUsersGetController {
     private static final String API_PATH = "/api/users";
     private static final Logger LOG = LoggerFactory.getLogger(GetAllUsersGetController.class);
 
-    @Operation(summary = "Get all Users")
+    @Operation(summary = "${apidoc.user.operations.getAll}")
     @GetMapping(
         value = API_PATH,
         produces = { "application/json" }

@@ -30,7 +30,7 @@ public class AddUserPostController {
     private static final String API_PATH = "/api/user";
     private static final Logger LOG = LoggerFactory.getLogger(AddUserPostController.class);
 
-    @Operation(summary = "Add new User")
+    @Operation(summary = "${apidoc.user.operations.newUser}")
     @PostMapping(
         value = API_PATH,
         produces = { "application/json" }

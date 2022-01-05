@@ -27,16 +27,22 @@ springdoc:
     use-root-path: true
 
 apidoc:
+  auth:
+    name: Authetication
+    description: 'Operations relationship about Authentications'
+    operations:
+      login: 'Sign In Users for Clients and admins'
   greet:
     name: Greet
     description: 'Operations relationship about greetings'
     operations:
-      getgreetbylanguage: 'Get Greet for one User authenticated by language specified'
+      getgreetbylanguage: 'Get greet and info of a user authenticated by language specified'
   user:
     name: User
     description: 'Operations relationship about Users'
     operations:
       getAll: 'Get all Users'
+      newUser: 'Add new User'
 
 ---
 
