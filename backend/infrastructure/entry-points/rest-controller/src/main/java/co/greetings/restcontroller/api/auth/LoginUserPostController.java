@@ -36,7 +36,7 @@ public class LoginUserPostController {
         value = API_PATH,
         produces = { "application/json" }
     )
-    public Mono<ResponseEntity<MessageHttpResponse>> addUser(@RequestBody EmailAndPasswordDtoRequest credentials) {
+    public Mono<ResponseEntity<MessageHttpResponse>> addUser(@RequestBody CredentialsDtoRequest credentials) {
         return Mono.defer(() -> {
             var auth = credentials.toAuth();
             return sessionLogin.login(auth)

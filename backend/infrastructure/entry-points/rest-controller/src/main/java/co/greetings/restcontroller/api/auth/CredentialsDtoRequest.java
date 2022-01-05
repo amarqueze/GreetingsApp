@@ -4,7 +4,7 @@ import co.greetings.model.auth.Auth;
 import lombok.Data;
 
 @Data
-public class EmailAndPasswordDtoRequest {
+public class CredentialsDtoRequest {
     private String emailUser;
     private String password;
 
