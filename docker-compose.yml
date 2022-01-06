@@ -25,7 +25,22 @@ services:
     networks:
       - demo-technicaltest 
     depends_on:
-      - aws_dynamodb          
+      - aws_dynamodb   
+
+  greetingsapp-server:
+    container_name: greetingsapp-server
+    build:
+        context: backend
+        dockerfile: Dockerfile
+    environment:
+      URL_ENDPOINT_DYNAMODB: "http://aws_dynamodb:8000"
+      SPRING_PROFILES_ACTIVE: "dev"
+    ports:
+      - 8081:8081
+    networks:
+      - demo-technicaltest  
+    depends_on:
+      - aws_dynamodb       
 
 networks:
   demo-technicaltest:
